@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart BMI Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .result span {
+            font-weight: bold;
+        }
+        .underweight {
+            color: #ffc107; /* Yellow for underweight */
+        }
+        .normal {
+            color: #28a745; /* Green for normal weight */
+        }
+        .overweight {
+            color: #fd7e14; /* Orange for overweight */
+        }
+        .obese {
+            color: #dc3545; /* Red for obese */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Smart BMI Calculator</h2>
+        <input type="text" id="name" placeholder="Enter your name" />
+        <input type="number" id="weight" placeholder="Enter weight in kg (1-500)" min="1" max="500" />
+        <input type="number" id="height" placeholder="Enter height in cm (30-250)" min="30" max="250" />
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            const name = document.getElementById('name').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100; // convert cm to meters
+            const resultDiv = document.getElementById('result');
+
+            // Input validation
+            if (!name || !weight || !height) {
+                resultDiv.innerHTML = 'Please fill out all fields.';
+                return;
+            }
+
+            if (weight < 1 || weight > 500) {
+                resultDiv.innerHTML = 'Please enter a valid weight between 1 and 500 kg.';
+                return;
+            }
+
+            if (height < 0.30 || height > 2.50) {
+                resultDiv.innerHTML = 'Please enter a valid height between 30 and 250 cm.';
+                return;
+            }
+
+            // BMI Calculation
+            const bmi = (weight / (height * height)).toFixed(2);
+            let status = '';
+            let colorClass = '';
+            let dietAdvice = '';
+
+            if (bmi < 18.5) {
+                status = 'underweight';
+                colorClass = 'underweight';
+                dietAdvice = 'Eat a high-calorie diet with plenty of protein and healthy fats.';
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                status = 'normal weight';
+                colorClass = 'normal';
+                dietAdvice = 'Maintain a balanced diet with fruits, vegetables, lean protein, and whole grains.';
+            } else if (bmi >= 25 && bmi < 29.9) {
+                status = 'overweight';
+                colorClass = 'overweight';
+                dietAdvice = 'Focus on a low-calorie diet rich in fiber and avoid sugary foods.';
+            } else {
+                status = 'obese';
+                colorClass = 'obese';
+                dietAdvice = 'Adopt a low-carb, high-protein diet and consider consulting a nutritionist.';
+            }
+
+            resultDiv.innerHTML = `
+                <span class="${colorClass}">${name}, your BMI is ${bmi}. You are ${status}.</span>
+                <p>Diet advice: ${dietAdvice}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
+
